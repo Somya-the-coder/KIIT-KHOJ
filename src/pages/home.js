@@ -5,7 +5,7 @@ export function renderHome(container) {
     <div class="home-page">
       <!-- Hero -->
       <section class="hero">
-        <span class="hero-badge">🎓 KIIT University • Batch 2022-2026</span>
+        <span class="hero-badge">🎓 KIIT University </span>
         <h1 class="hero-title">KIIT KHOJ</h1>
         <p class="hero-subtitle">
           Your ultimate treasure trove of <strong style="color: var(--text-accent);">Previous Year Questions</strong>. 
