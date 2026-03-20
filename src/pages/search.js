@@ -284,9 +284,8 @@ async function loadPDFs(subject, area) {
         e.stopPropagation();
         const frameContainer = listContainer.querySelector('#pdf-preview-frame');
         frameContainer.innerHTML = `
-          <div class="pdf-frame-container" style="position: relative;">
-            <iframe src="${btn.dataset.url}" title="PDF Preview" style="width: 100%; height: 600px; border: none;"></iframe>
-            <div class="pdf-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 10; background: transparent;"></div>
+          <div class="pdf-frame-container">
+            <iframe src="${btn.dataset.url}" title="PDF Preview" style="width: 100%; height: 750px; border: none;"></iframe>
           </div>
         `;
       });
