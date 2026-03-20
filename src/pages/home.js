@@ -93,11 +93,13 @@ export function renderHome(container) {
         </div>
       </section>
 
-      <!-- Footer -->
-      <footer class="copyright-footer no-select">
-        <p>© 2026 KIIT KHOJ. All rights reserved.</p>
-        <p style="margin-top: 4px; font-size: 0.75rem; color: var(--text-muted);">
-          Made with ❤️ for KIIT Students
+      <footer class="copyright-footer no-select" style="padding: 60px 24px 40px; text-align: center; border-top: 1px solid var(--border-subtle);">
+        <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 10px;">© 2026 KIIT KHOJ. All rights reserved.</p>
+        <p style="color: var(--text-primary); font-size: 1rem; font-weight: 500;">
+          Made with 💚 for KIIT Juniors by KIIT Senior
+        </p>
+        <p style="margin-top: 12px; font-size: 0.7rem; color: var(--text-muted); opacity: 0.5;">
+          Proprietary Software • Unauthorized cloning or reproduction is strictly prohibited.
         </p>
       </footer>
     </div>

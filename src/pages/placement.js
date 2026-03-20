@@ -7,11 +7,11 @@ export function renderPlacement(container) {
   if (!user) {
     container.innerHTML = `
       <div class="placement-page restricted-view">
-        <div class="glass-card restricted-card fade-in">
-          <div class="restricted-icon">🔐</div>
-          <h1 class="glow-text">Access Restricted</h1>
-          <p>Please log in with your <strong>KIIT Email</strong> to see placement interview experiences and share your own.</p>
-          <button class="btn btn-primary" id="restricted-login-btn">🔐 Login with KIIT Mail</button>
+        <div class="glass-card restricted-card fade-in" style="max-width: 500px; margin: 100px auto; padding: 40px; text-align: center; border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); background: var(--bg-card); backdrop-filter: blur(20px);">
+          <div class="restricted-icon" style="font-size: 3rem; margin-bottom: 20px;">💼</div>
+          <h1 class="glow-text" style="font-size: 2rem; margin-bottom: 15px;">Access Experiences</h1>
+          <p style="color: var(--text-secondary); margin-bottom: 25px;">Please log in with your <strong>KIIT Email</strong> to read placement talks and share your interview journey.</p>
+          <button class="btn btn-primary" id="restricted-login-btn" style="padding: 12px 32px; font-size: 1rem; border-radius: var(--radius-md); cursor: pointer;">Login via KIIT Mail</button>
         </div>
       </div>
     `;

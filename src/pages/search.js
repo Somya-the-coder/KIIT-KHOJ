@@ -11,12 +11,12 @@ export function renderSearch(container) {
   if (!user) {
     container.innerHTML = `
       <div class="search-page restricted-view">
-        <div class="glass-card restricted-card fade-in">
-          <div class="restricted-icon">🔐</div>
-          <h1 class="glow-text">Access Restricted</h1>
-          <p>Please log in with your <strong>KIIT Email</strong> to search for PYQs, view PDFs, and participate in discussions.</p>
-          <button class="btn btn-primary" id="restricted-login-btn">🔐 Login with KIIT Mail</button>
-          <p style="margin-top: 20px; font-size: 0.85rem; color: var(--text-muted);">Only @kiit.ac.in emails are allowed.</p>
+        <div class="glass-card restricted-card fade-in" style="max-width: 500px; margin: 100px auto; padding: 40px; text-align: center; border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); background: var(--bg-card); backdrop-filter: blur(20px);">
+          <div class="restricted-icon" style="font-size: 3rem; margin-bottom: 20px;">🕊️</div>
+          <h1 class="glow-text" style="font-size: 2rem; margin-bottom: 15px;">Join the Community</h1>
+          <p style="color: var(--text-secondary); margin-bottom: 25px;">To keep our resources secure and community-focused, please log in briefly with your <strong>KIIT Mail</strong> id.</p>
+          <button class="btn btn-primary" id="restricted-login-btn" style="padding: 12px 32px; font-size: 1rem; border-radius: var(--radius-md); cursor: pointer;">Login via KIIT Mail</button>
+          <p style="margin-top: 24px; font-size: 0.85rem; color: var(--text-muted); opacity: 0.7;">This helps us maintain the portal for everyone.</p>
         </div>
       </div>
     `;
@@ -284,8 +284,9 @@ async function loadPDFs(subject, area) {
         e.stopPropagation();
         const frameContainer = listContainer.querySelector('#pdf-preview-frame');
         frameContainer.innerHTML = `
-          <div class="pdf-frame-container">
-            <iframe src="${btn.dataset.url}" title="PDF Preview"></iframe>
+          <div class="pdf-frame-container" style="position: relative;">
+            <iframe src="${btn.dataset.url}" title="PDF Preview" style="width: 100%; height: 600px; border: none;"></iframe>
+            <div class="pdf-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 10; background: transparent;"></div>
           </div>
         `;
       });
