@@ -207,21 +207,45 @@ async function loadAdminData(container) {
       });
     }
 
-    // Users = unique emails from all tables
-    const allEmails = new Set();
-    if (pdfs) pdfs.forEach(p => { if (p.uploader_email) allEmails.add(p.uploader_email); });
+    // Load Users from tracking table
+    const { data: trackedUsers, error: usersError } = await supabase
+      .from('users_tracking')
+      .select('*')
+      .order('last_login', { ascending: false });
 
-    container.querySelector('#stat-users').textContent = allEmails.size || '0';
-    container.querySelector('#users-table-container').innerHTML = allEmails.size ? `
-      <table class="admin-table glass-card">
-        <thead><tr><th>#</th><th>Email ID</th></tr></thead>
-        <tbody>
-          ${[...allEmails].map((email, i) => `
-            <tr><td>${i + 1}</td><td>${email}</td></tr>
-          `).join('')}
-        </tbody>
-      </table>
-    ` : '<p style="color:var(--text-muted);">No user data yet. Users appear after they upload PDFs.</p>';
+    if (!usersError && trackedUsers) {
+      container.querySelector('#stat-users').textContent = trackedUsers.length;
+      container.querySelector('#users-table-container').innerHTML = trackedUsers.length ? `
+        <table class="admin-table glass-card">
+          <thead><tr><th>#</th><th>Email ID</th><th>Last Seen</th></tr></thead>
+          <tbody>
+            ${trackedUsers.map((u, i) => `
+              <tr>
+                <td>${i + 1}</td>
+                <td>${u.email}</td>
+                <td>${new Date(u.last_login).toLocaleString('en-IN')}</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      ` : '<p style="color:var(--text-muted);">No users tracked yet.</p>';
+    } else {
+      // Fallback to legacy method if table not found or error
+      const allEmails = new Set();
+      if (pdfs) pdfs.forEach(p => { if (p.uploader_email) allEmails.add(p.uploader_email); });
+      
+      container.querySelector('#stat-users').textContent = allEmails.size || '0';
+      container.querySelector('#users-table-container').innerHTML = allEmails.size ? `
+        <table class="admin-table glass-card">
+          <thead><tr><th>#</th><th>Email ID</th></tr></thead>
+          <tbody>
+            ${[...allEmails].map((email, i) => `
+              <tr><td>${i + 1}</td><td>${email}</td></tr>
+            `).join('')}
+          </tbody>
+        </table>
+      ` : '<p style="color:var(--text-muted);">No user data yet. (Run the SQL from README to enable tracking)</p>';
+    }
 
   } catch (err) {
     showToast('Error loading admin data: ' + err.message, 'error');

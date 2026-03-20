@@ -31,6 +31,7 @@ export async function initAuth() {
   if (session?.user) {
     if (session.user.email?.endsWith('@kiit.ac.in')) {
       currentUser = session.user;
+      await syncUserTracking(session.user);
     } else {
       await supabase.auth.signOut();
       showToast('Only @kiit.ac.in emails are allowed!', 'error');
@@ -44,6 +45,7 @@ export async function initAuth() {
     if (session?.user) {
       if (session.user.email?.endsWith('@kiit.ac.in')) {
         currentUser = session.user;
+        await syncUserTracking(session.user);
       } else {
         await supabase.auth.signOut();
         showToast('Only @kiit.ac.in emails are allowed!', 'error');
@@ -54,6 +56,23 @@ export async function initAuth() {
     }
     notifyListeners();
   });
+}
+
+async function syncUserTracking(user) {
+  if (!user?.email) return;
+  
+  try {
+    const { error } = await supabase
+      .from('users_tracking')
+      .upsert({ 
+        email: user.email, 
+        last_login: new Date().toISOString() 
+      }, { onConflict: 'email' });
+      
+    if (error) console.error('Tracking error:', error.message);
+  } catch (err) {
+    console.error('Tracking catch:', err);
+  }
 }
 
 export async function signIn() {

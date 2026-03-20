@@ -71,10 +71,18 @@ CREATE TABLE placements (
   created_at TIMESTAMPTZ DEFAULT now()
 );
 
+-- Track all logged-in users
+CREATE TABLE users_tracking (
+  email TEXT PRIMARY KEY,
+  last_login TIMESTAMPTZ DEFAULT now(),
+  created_at TIMESTAMPTZ DEFAULT now()
+);
+
 -- Enable Row Level Security
 ALTER TABLE pdfs ENABLE ROW LEVEL SECURITY;
 ALTER TABLE discussions ENABLE ROW LEVEL SECURITY;
 ALTER TABLE placements ENABLE ROW LEVEL SECURITY;
+ALTER TABLE users_tracking ENABLE ROW LEVEL SECURITY;
 
 -- RLS Policies: Anyone can read, authenticated users can insert
 CREATE POLICY "Anyone can read pdfs" ON pdfs FOR SELECT USING (true);
@@ -97,6 +105,15 @@ CREATE POLICY "Author or admin can delete placements" ON placements FOR DELETE U
   auth.uid() = user_id OR 
   auth.jwt() ->> 'email' = '22052858@kiit.ac.in'
 );
+
+CREATE POLICY "Anyone can insert/update their own tracking" ON users_tracking 
+FOR INSERT WITH CHECK (auth.jwt() ->> 'email' = email);
+
+CREATE POLICY "Anyone can update their own tracking" ON users_tracking 
+FOR UPDATE USING (auth.jwt() ->> 'email' = email);
+
+CREATE POLICY "Admin can read all tracking" ON users_tracking 
+FOR SELECT USING (auth.jwt() ->> 'email' = '22052858@kiit.ac.in');
 ```
 
 6. Copy your **Project URL** and **anon key** from Settings → API
