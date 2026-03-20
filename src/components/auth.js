@@ -69,7 +69,11 @@ async function syncUserTracking(user) {
         last_login: new Date().toISOString() 
       }, { onConflict: 'email' });
       
-    if (error) console.error('Tracking error:', error.message);
+    if (error) {
+      console.error('Tracking error:', error.message);
+    } else {
+      console.log('✅ User sync successful:', user.email);
+    }
   } catch (err) {
     console.error('Tracking catch:', err);
   }

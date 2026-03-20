@@ -44,7 +44,10 @@ export function renderAdmin(container) {
 
       <!-- User Emails -->
       <div class="admin-section">
-        <h2>👥 Registered Users (Email IDs)</h2>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+          <h2 style="margin: 0;">👥 Registered Users (Email IDs)</h2>
+          <button class="btn btn-primary btn-small" id="refresh-users-btn">🔄 Refresh List</button>
+        </div>
         <div id="users-table-container">
           <div class="spinner"></div>
         </div>
@@ -245,6 +248,16 @@ async function loadAdminData(container) {
           </tbody>
         </table>
       ` : '<p style="color:var(--text-muted);">No user data yet. (Run the SQL from README to enable tracking)</p>';
+    }
+
+    // Attach refresh button handler
+    const refreshBtn = container.querySelector('#refresh-users-btn');
+    if (refreshBtn) {
+      refreshBtn.onclick = () => {
+        refreshBtn.classList.add('loading');
+        loadAdminData(container);
+        setTimeout(() => refreshBtn.classList.remove('loading'), 500);
+      };
     }
 
   } catch (err) {
