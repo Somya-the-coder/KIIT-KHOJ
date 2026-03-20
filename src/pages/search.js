@@ -6,6 +6,24 @@ let selectedSubject = null;
 let realtimeSubscription = null;
 
 export function renderSearch(container) {
+  const user = getCurrentUser();
+
+  if (!user) {
+    container.innerHTML = `
+      <div class="search-page restricted-view">
+        <div class="glass-card restricted-card fade-in">
+          <div class="restricted-icon">🔐</div>
+          <h1 class="glow-text">Access Restricted</h1>
+          <p>Please log in with your <strong>KIIT Email</strong> to search for PYQs, view PDFs, and participate in discussions.</p>
+          <button class="btn btn-primary" id="restricted-login-btn">🔐 Login with KIIT Mail</button>
+          <p style="margin-top: 20px; font-size: 0.85rem; color: var(--text-muted);">Only @kiit.ac.in emails are allowed.</p>
+        </div>
+      </div>
+    `;
+    container.querySelector('#restricted-login-btn').addEventListener('click', signIn);
+    return;
+  }
+
   container.innerHTML = `
     <div class="search-page">
       <div class="search-header fade-in">

@@ -84,22 +84,22 @@ ALTER TABLE discussions ENABLE ROW LEVEL SECURITY;
 ALTER TABLE placements ENABLE ROW LEVEL SECURITY;
 ALTER TABLE users_tracking ENABLE ROW LEVEL SECURITY;
 
--- RLS Policies: Anyone can read, authenticated users can insert
-CREATE POLICY "Anyone can read pdfs" ON pdfs FOR SELECT USING (true);
+-- RLS Policies: Authenticated users can read, authenticated users can insert
+CREATE POLICY "Auth users can read pdfs" ON pdfs FOR SELECT USING (auth.role() = 'authenticated');
 CREATE POLICY "Auth users can insert pdfs" ON pdfs FOR INSERT WITH CHECK (auth.uid() = uploaded_by);
 CREATE POLICY "Uploader or admin can delete pdfs" ON pdfs FOR DELETE USING (
   auth.uid() = uploaded_by OR 
   auth.jwt() ->> 'email' = '22052858@kiit.ac.in'
 );
 
-CREATE POLICY "Anyone can read discussions" ON discussions FOR SELECT USING (true);
+CREATE POLICY "Auth users can read discussions" ON discussions FOR SELECT USING (auth.role() = 'authenticated');
 CREATE POLICY "Auth users can insert discussions" ON discussions FOR INSERT WITH CHECK (auth.uid() = user_id);
 CREATE POLICY "Author or admin can delete discussions" ON discussions FOR DELETE USING (
   auth.uid() = user_id OR 
   auth.jwt() ->> 'email' = '22052858@kiit.ac.in'
 );
 
-CREATE POLICY "Anyone can read placements" ON placements FOR SELECT USING (true);
+CREATE POLICY "Auth users can read placements" ON placements FOR SELECT USING (auth.role() = 'authenticated');
 CREATE POLICY "Auth users can insert placements" ON placements FOR INSERT WITH CHECK (auth.uid() = user_id);
 CREATE POLICY "Author or admin can delete placements" ON placements FOR DELETE USING (
   auth.uid() = user_id OR 

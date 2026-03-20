@@ -2,6 +2,23 @@ import { supabase, ADMIN_EMAIL, isSupabaseConfigured } from '../supabase.js';
 import { getCurrentUser, isAdmin, getUsername, signIn, showToast } from '../components/auth.js';
 
 export function renderPlacement(container) {
+  const user = getCurrentUser();
+
+  if (!user) {
+    container.innerHTML = `
+      <div class="placement-page restricted-view">
+        <div class="glass-card restricted-card fade-in">
+          <div class="restricted-icon">🔐</div>
+          <h1 class="glow-text">Access Restricted</h1>
+          <p>Please log in with your <strong>KIIT Email</strong> to see placement interview experiences and share your own.</p>
+          <button class="btn btn-primary" id="restricted-login-btn">🔐 Login with KIIT Mail</button>
+        </div>
+      </div>
+    `;
+    container.querySelector('#restricted-login-btn').addEventListener('click', signIn);
+    return;
+  }
+
   container.innerHTML = `
     <div class="placement-page">
       <div class="placement-header fade-in">

@@ -395,6 +395,36 @@ textarea.input-field {
   user-select: none;
 }
 
+/* Restricted View */
+.restricted-view {
+  min-height: calc(100vh - var(--nav-height));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  text-align: center;
+}
+
+.restricted-card {
+  max-width: 500px;
+  padding: 60px 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+}
+
+.restricted-icon {
+  font-size: 4rem;
+  margin-bottom: 10px;
+}
+
+.restricted-card p {
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+  line-height: 1.6;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .container {
@@ -406,6 +436,9 @@ textarea.input-field {
   .btn {
     padding: 10px 20px;
     font-size: 0.9rem;
+  }
+  .restricted-card {
+    padding: 40px 24px;
   }
 }
 
