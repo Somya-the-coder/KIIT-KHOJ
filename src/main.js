@@ -99,9 +99,11 @@ async function init() {
     '/admin': renderAdmin,
   });
 
-  // Register Service Worker
+  // Register Service Worker AFTER page load to not interfere with Auth
   if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('/sw.js').catch(() => {});
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sw.js').catch(() => {});
+    });
   }
 }
 
