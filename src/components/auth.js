@@ -86,7 +86,7 @@ export async function signIn() {
       queryParams: {
         hd: 'kiit.ac.in',
       },
-      redirectTo: window.location.origin,
+      redirectTo: window.location.origin + window.location.pathname,
     },
   });
   if (error) {

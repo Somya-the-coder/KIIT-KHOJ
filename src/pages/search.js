@@ -28,7 +28,7 @@ export function renderSearch(container) {
     <div class="search-page">
       <div class="search-header fade-in">
         <h1 class="glow-text">Find Your PYQs 🔍</h1>
-        <p>Search from 50+ subjects — Midsem & Endsem merged into one paper</p>
+        <p>Search from 50+ subjects — <span style="color: #ff4d4d; font-weight: 600; text-shadow: 0 0 8px rgba(255, 77, 77, 0.3);">Midsem & Endsem merged into one paper</span></p>
       </div>
 
       <!-- Search Bar -->
@@ -56,13 +56,6 @@ export function renderSearch(container) {
 
       <div class="subject-grid" id="subject-grid"></div>
 
-      <!-- Upload Section -->
-      <div class="divider container" style="margin-top: 60px;"></div>
-      <div class="upload-section" id="upload-section">
-        <h2 class="glow-text" style="text-align:center; margin-bottom: 24px;">📤 Upload PYQ Papers</h2>
-        <div id="upload-content"></div>
-      </div>
-
       <footer class="copyright-footer no-select">
         <p>© 2026 KIIT KHOJ. All rights reserved.</p>
       </footer>
@@ -72,7 +65,6 @@ export function renderSearch(container) {
   initSearchAutocomplete(container);
   initYearTabs(container);
   renderSubjectGrid(container, 'all');
-  renderUploadSection(container);
 }
 
 // ===== SEARCH AUTOCOMPLETE =====
@@ -208,7 +200,16 @@ async function selectSubject(subjectName, container) {
       <div id="pdf-list-container">
         <div class="spinner"></div>
       </div>
-      <div class="divider"></div>
+      
+      <div class="divider" style="margin: 20px 0;"></div>
+      
+      <!-- Upload Section Moved Here -->
+      <div class="upload-section" id="upload-section" style="max-width: 100%; background: var(--bg-card); padding: 25px; border-radius: var(--radius-lg); border: 1px solid var(--border-subtle); margin-bottom: 20px;">
+        <h2 class="glow-text" style="text-align:center; margin-bottom: 16px; font-size: 1.3rem;">📤 Contribute PYQ Papers</h2>
+        <div id="upload-content"></div>
+      </div>
+
+      <div class="divider" style="margin: 20px 0;"></div>
       <div id="discussion-container">
         <div class="spinner"></div>
       </div>
@@ -216,6 +217,7 @@ async function selectSubject(subjectName, container) {
   `;
 
   await loadPDFs(subjectName, area);
+  renderUploadSection(area, subjectName, container); 
   await loadDiscussions(subjectName, area);
 }
 
@@ -619,8 +621,9 @@ async function loadReplies(parentId, container, subject) {
 }
 
 // ===== UPLOAD SECTION =====
-function renderUploadSection(container) {
+function renderUploadSection(container, defaultSubject = null, mainContainer = null) {
   const uploadContent = container.querySelector('#upload-content');
+  const refreshTarget = mainContainer || container;
   const user = getCurrentUser();
 
   if (!user) {
@@ -635,19 +638,25 @@ function renderUploadSection(container) {
   }
 
   uploadContent.innerHTML = `
-    <div class="upload-zone" id="upload-zone">
-      <span class="icon">📁</span>
-      <p>Drag & drop your PDF here</p>
-      <p class="hint">or click to browse • PDF only • Max 10MB</p>
+    <div class="upload-zone" id="upload-zone" style="padding: 24px; border-width: 1px;">
+      <span class="icon" style="font-size: 2rem; margin-bottom: 8px;">📁</span>
+      <p style="font-size: 0.9rem; margin-bottom: 4px;">Drag & drop your PDF here</p>
+      <p class="hint" style="font-size: 0.75rem; margin-bottom: 0;">or click to browse • PDF only • Max 10MB</p>
       <input type="file" id="file-input" accept=".pdf" style="display:none;" />
     </div>
-    <div class="upload-form-fields" id="upload-fields" style="display:none;">
-      <select class="input-field" id="upload-subject">
-        <option value="">Select Subject...</option>
-        ${subjects.map((s) => `<option value="${s.name}">${s.name} (${s.abbr})</option>`).join('')}
-      </select>
-      <div id="selected-file-name" style="color: var(--text-secondary); font-size: 0.9rem;"></div>
-      <button class="btn btn-primary" id="upload-btn">📤 Upload PDF</button>
+    <div class="upload-form-fields" id="upload-fields" style="display:none; margin-top: 15px;">
+      <div style="width: 100%;">
+        <select class="input-field" id="upload-subject">
+          <option value="">Select Subject...</option>
+          ${subjects.map((s) => `<option value="${s.name}" ${s.name === defaultSubject ? 'selected' : ''}>${s.name} (${s.abbr})</option>`).join('')}
+        </select>
+        <div style="font-size: 0.72rem; color: #fff; margin-top: 8px; font-weight: 700; background: linear-gradient(90deg, #ff4d4d, #f43f5e); padding: 5px 12px; border-radius: 6px; box-shadow: 0 0 12px rgba(255, 77, 77, 0.3); display: inline-flex; align-items: center; gap: 6px; border: 1px solid rgba(255, 255, 255, 0.15);">
+          <span style="font-size: 0.9rem;">📢</span>
+          <span style="letter-spacing: 0.2px;">Midsem & Endsem merged in a single PDF</span>
+        </div>
+      </div>
+      <div id="selected-file-name" style="color: var(--text-secondary); font-size: 0.85rem;"></div>
+      <button class="btn btn-primary" id="upload-btn" style="padding: 10px 20px;">📤 Upload PDF</button>
     </div>
   `;
 
@@ -737,7 +746,7 @@ function renderUploadSection(container) {
 
       // Refresh if same subject selected
       if (selectedSubject === subject) {
-        selectSubject(subject, container);
+        selectSubject(subject, refreshTarget);
       }
     } catch (err) {
       showToast('Upload failed: ' + err.message, 'error');

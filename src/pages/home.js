@@ -19,6 +19,9 @@ export function renderHome(container) {
           <button class="btn btn-secondary" id="cta-placements">
             💼 Placement Talks
           </button>
+          <button class="btn btn-secondary" id="cta-khazana" style="border: 1px solid var(--text-accent); color: var(--text-accent); background: rgba(124, 58, 237, 0.05);">
+            💎 The Real Khazana
+          </button>
         </div>
       </section>
 
@@ -108,6 +111,7 @@ export function renderHome(container) {
   // CTA buttons
   container.querySelector('#cta-search').addEventListener('click', () => navigateTo('/search'));
   container.querySelector('#cta-placements').addEventListener('click', () => navigateTo('/placements'));
+  container.querySelector('#cta-khazana').addEventListener('click', () => navigateTo('/khazana'));
 
   // Intersection observer for fade-in animations
   const observer = new IntersectionObserver((entries) => {

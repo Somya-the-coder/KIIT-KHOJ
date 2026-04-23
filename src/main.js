@@ -4,6 +4,7 @@ import './styles/home.css';
 import './styles/search.css';
 import './styles/forum.css';
 import './styles/placement.css';
+import './styles/khazana.css';
 
 import { initRouter } from './router.js';
 import { renderNavbar } from './components/navbar.js';
@@ -15,54 +16,48 @@ import { renderHome } from './pages/home.js';
 import { renderSearch } from './pages/search.js';
 import { renderPlacement } from './pages/placement.js';
 import { renderAdmin } from './pages/admin.js';
+import { renderKhazana } from './pages/khazana.js';
 
 // Global Anti-copy & Security measures (Immediate Lockdown)
 const lockdown = () => {
   const block = (e) => {
     try {
-      if (!e.target.closest('input, textarea, .selectable')) {
-        e.preventDefault();
-        e.stopPropagation();
-        if (typeof showToast === 'function') {
-          showToast('Action restricted for security.', 'info');
-        }
-        return false;
+      // Never block interactive elements (buttons, links, inputs)
+      if (e.target.closest('input, textarea, button, a, .selectable, [role="button"]')) {
+        return;
       }
-    } catch (err) {
       e.preventDefault();
-    }
+      if (e.type === 'contextmenu' && typeof showToast === 'function') {
+        showToast('Right-click is restricted.', 'info');
+      }
+    } catch (err) {}
   };
 
-  // Block Right Click (Window, Document, and Root)
+  // Block Right Click, Copy, Cut (Non-intrusive)
   ['contextmenu', 'copy', 'cut', 'dragstart'].forEach(event => {
     window.addEventListener(event, block, true);
-    document.addEventListener(event, block, true);
-    document.documentElement.addEventListener(event, block, true);
   });
 
-  // Block Shortcuts
+  // Block Shortcuts (Selective only)
   const handleKey = (e) => {
     try {
       const key = e.key.toUpperCase();
       const ctrl = e.ctrlKey || e.metaKey;
       const shift = e.shiftKey;
 
+      // Only block 'DevTools' or 'Save' specific keys
       const isForbidden = 
         e.key === 'F12' ||
-        (ctrl && ['U', 'S', 'P', 'J', 'C'].includes(key)) ||
+        (ctrl && ['U', 'S', 'P', 'J'].includes(key)) ||
         (ctrl && shift && ['I', 'J', 'C'].includes(key));
 
       if (isForbidden) {
         e.preventDefault();
-        e.stopPropagation();
         if (typeof showToast === 'function') {
           showToast('Developer tools are restricted.', 'info');
         }
-        return false;
       }
-    } catch (err) {
-      e.preventDefault();
-    }
+    } catch (err) {}
   };
 
   window.addEventListener('keydown', handleKey, true);
@@ -96,6 +91,7 @@ async function init() {
     '/': renderHome,
     '/search': renderSearch,
     '/placements': renderPlacement,
+    '/khazana': renderKhazana,
     '/admin': renderAdmin,
   });
 

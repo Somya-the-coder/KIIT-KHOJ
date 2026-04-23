@@ -12,6 +12,7 @@ export function renderNavbar() {
         <button class="nav-link" data-route="/">🏠 Home</button>
         <button class="nav-link" data-route="/search">🔍 Search PYQs</button>
         <button class="nav-link" data-route="/placements">💼 Placements</button>
+        <button class="nav-link" data-route="/khazana">💎 Khazana</button>
         <button class="nav-link admin-link" data-route="/admin" style="display:none;">⚙️ Admin</button>
       </div>
       <div class="nav-auth" id="nav-auth"></div>
