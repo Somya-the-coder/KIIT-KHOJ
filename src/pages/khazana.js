@@ -1,7 +1,7 @@
 import { supabase, isSupabaseConfigured, ADMIN_EMAIL } from '../supabase.js';
 import { getCurrentUser, isAdmin, showToast } from '../components/auth.js';
 
-let currentSemester = 1;
+let currentSemester = 1; // 1-8 for sems, 0 for syllabus
 
 export function renderKhazana(container) {
   const user = getCurrentUser();
@@ -41,6 +41,9 @@ export function renderKhazana(container) {
 
       <!-- Semester Tabs -->
       <div class="semester-tabs">
+        <button class="sem-tab ${currentSemester === 0 ? 'active' : ''}" data-sem="0">
+          📜 Whole B.Tech Syllabus
+        </button>
         ${[1, 2, 3, 4, 5, 6, 7, 8].map(sem => `
           <button class="sem-tab ${sem === currentSemester ? 'active' : ''}" data-sem="${sem}">
             Sem ${sem}
@@ -161,7 +164,7 @@ async function loadMaterials(sem, container) {
     if (error) throw error;
 
     if (!data || data.length === 0) {
-      grid.innerHTML = `<div class="no-materials">📭 No materials in Semester ${sem} yet.</div>`;
+      grid.innerHTML = `<div class="no-materials">📭 No ${sem === 0 ? 'syllabus' : 'materials in Semester ' + sem} yet.</div>`;
       return;
     }
 
